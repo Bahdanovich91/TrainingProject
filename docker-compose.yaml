@@ -1,0 +1,62 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: training
+    container_name: app-trainingProject
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      PHP_IDE_CONFIG: "serverName=localhost"
+      XDEBUG_CONFIG: "idekey=PHPSTORM"
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./php/conf.d/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - app-trainingProject-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-trainingProject
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-trainingProject-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-trainingProject
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-trainingProject-network
+
+networks:
+  app-trainingProject-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
