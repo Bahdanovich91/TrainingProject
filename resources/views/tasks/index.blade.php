@@ -14,7 +14,7 @@
                     <label>
                         <input type="checkbox" class="task-checkbox"
                                data-task-id="{{ $task->id }}" {{ $task->completed ? 'checked' : '' }}>
-                        <a href="#">{{ $task->title }}</a>
+                        <a href="{{ route('tasks.show', $task->id) }}">{{ $task->title }}</a>
                     </label>
                 </div>
             @endforeach
