@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Card extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
-        'completed',
         'description'
     ];
 
-    public function cards()
+    public function task()
     {
-        return $this->hasMany(Card::class, 'task_id');
+        return $this->belongsTo(Task::class);
     }
 }
