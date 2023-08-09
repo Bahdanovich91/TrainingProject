@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -37,6 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+
+    Route::get('/cards', [CardController::class, 'index'])->name('cards.index');
+    Route::post('/cards/{task}', [CardController::class, 'store'])->name('cards.store');
+    Route::get('/cards/{card}', [CardController::class, 'show'])->name('cards.show');
+    Route::put('/cards/{task}/{card}', [CardController::class, 'update'])->name('cards.update');
 });
 
 require __DIR__.'/auth.php';

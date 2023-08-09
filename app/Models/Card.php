@@ -11,7 +11,8 @@ class Card extends Model
 
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'task_id'
     ];
 
     public function task()

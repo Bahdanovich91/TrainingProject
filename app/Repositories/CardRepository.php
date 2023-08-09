@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Task;
+use App\Models\Card;
 
-class TaskRepository
+class CardRepository
 {
     protected $model;
 
-    public function __construct(Task $model)
+    public function __construct(Card $model)
     {
         $this->model = $model;
     }
@@ -30,9 +30,9 @@ class TaskRepository
 
     public function update(int $id, array $data)
     {
-        $task = $this->model->find($id);
-        $task->update($data);
-        return $task;
+        $card = $this->model->find($id);
+        $card->update($data);
+        return $card;
     }
 
     public function delete(int $id)

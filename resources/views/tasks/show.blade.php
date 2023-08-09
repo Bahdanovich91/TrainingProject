@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('inc.card', $task)
+    @include('cards.index', $task)
 @endsection

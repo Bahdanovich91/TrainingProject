@@ -2,13 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Card;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Task;
+use App\Repositories\CardRepository;
 use App\Repositories\PermissionRepository;
 use App\Repositories\RolePermissionRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\TaskRepository;
+use App\Services\CardService;
 use App\Services\PermissionService;
 use App\Services\RolePermissionService;
 use App\Services\RoleService;
@@ -36,6 +39,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(TaskService::class, function ($app) {
             return new TaskService(new TaskRepository(new Task()));
+        });
+
+        $this->app->bind(CardService::class, function ($app) {
+            return new CardService(new CardRepository(new Card()));
         });
     }
 
