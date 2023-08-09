@@ -42,18 +42,9 @@ class TaskService
 
     public function update(int $id, array $data)
     {
-        $validator = Validator::make($data, [
-            'title' => 'required|max:255|unique:tasks,name,' . $id,
-            'description' => 'nullable|max:255',
-        ]);
+        $task = $this->repository->update($id, $data);
 
-        if ($validator->fails()) {
-            return ['success' => false, 'errors' => $validator->errors()->all()];
-        }
-
-        $role = $this->repository->update($id, $data);
-
-        return ['success' => true, 'data' => $role];
+        return ['success' => true, 'data' => $task];
     }
 
     public function delete(int $id)

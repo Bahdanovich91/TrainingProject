@@ -42,10 +42,12 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        $task->update([
-            'completed' => $request->completed,
-        ]);
+        $result = $this->service->update($task->id, $request->all());
 
-        return response()->json(['message' => 'Task updated successfully']);
+        if ($result['success']) {
+            return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
+        }
+
+        return redirect()->back()->withInput()->withErrors($result['errors']);
     }
 }
