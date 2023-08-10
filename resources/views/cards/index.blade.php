@@ -37,20 +37,62 @@
         @foreach ($task->cards as $card)
             <tr>
                 <td>
-                    <div id="card_{{ $card->id }}" class="card col-3" data-card-id="{{ $card->id }}">
-                        <h5 class="card-header">{{ $card->title }}</h5>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $card->title }}</h5>
-                            <p class="card-text">{{ $card->description }}</p>
-                            <a href="#" class="btn btn-primary">Open</a>
-                        </div>
-                    </div>
+                    @if($card->status == 0)
+                        @include('inc.card')
+                    @endif
                 </td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    @if($card->status == 1)
+                        @include('inc.card')
+                    @endif
+                </td>
+                <td>
+                    @if($card->status == 2)
+                        @include('inc.card')
+                    @endif
+                </td>
+                <td>
+                    @if($card->status == 3)
+                       @include('inc.card')
+                    @endif
+                </td>
             </tr>
         @endforeach
     @endif
     </tbody>
 </table>
+
+<script>
+    $(function () {
+        $(".card").draggable({
+            helper: "clone",
+            revert: "invalid",
+            cursor: "move",
+        });
+
+        $("td").droppable({
+            accept: ".card",
+            drop: function (event, ui) {
+                var cardId = ui.draggable.data("card-id");
+                var targetColumn = $(this).index();
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                $.ajax({
+                    url: "/cards/update-status",
+                    method: "POST",
+                    data: {cardId: cardId, targetColumn: targetColumn},
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    success: function (response) {
+                        console.log("Card status updated successfully");
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.error("Error updating card status");
+                    }
+                });
+            }
+        });
+    });
+</script>

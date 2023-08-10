@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Services\CardService;
 use Illuminate\Http\Request;
 
@@ -32,15 +33,32 @@ class CardController extends Controller
         }
     }
 
-    public function update(Request $request, string $taskId, string $id)
+    public function update(Request $request, $id)
     {
         $result = $this->service->update($id, $request->all());
 
         if ($result['success']) {
-            return redirect()->route('cards.index')->with('success', 'Card updated successfully.');
+            return response()->json(['message' => 'Card status updated successfully'], 200);
         }
 
         return redirect()->back()->withInput()->withErrors($result['errors']);
+    }
+
+    public function updateCardStatus(Request $request)
+    {
+        $cardId = $request->input('cardId');
+        $targetColumn = $request->input('targetColumn');
+
+        $card = Card::find($cardId);
+
+        if (!$card) {
+            return response()->json(['error' => 'Card not found'], 404);
+        }
+        $card->status = $targetColumn;
+
+        $card->save();
+
+        return response()->json(['message' => 'Card status updated successfully'], 200);
     }
 
     public function create(Request $request)

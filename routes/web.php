@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
 
     Route::get('/cards', [CardController::class, 'index'])->name('cards.index');
+    Route::post('/cards/update-status', [CardController::class, 'updateCardStatus']);
     Route::post('/cards/{task}', [CardController::class, 'store'])->name('cards.store');
     Route::get('/cards/{card}', [CardController::class, 'show'])->name('cards.show');
     Route::put('/cards/{task}/{card}', [CardController::class, 'update'])->name('cards.update');

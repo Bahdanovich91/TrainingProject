@@ -9,6 +9,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

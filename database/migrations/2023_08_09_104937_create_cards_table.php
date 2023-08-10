@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('task_id');
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }
