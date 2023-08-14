@@ -30,9 +30,9 @@ class TaskService
             return ['success' => false, 'errors' => $validator->errors()->all()];
         }
 
-        $role = $this->repository->create($data);
+        $task = $this->repository->create($data);
 
-        return ['success' => true, 'data' => $role];
+        return ['success' => true, 'data' => $task];
     }
 
     public function find(int $id)
