@@ -4,6 +4,7 @@ namespace tests\Feature;
 
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -12,6 +13,15 @@ use Tests\TestCase;
 class TaskControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    private Model $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
 
     public function testUnauthorizedUserCannotSeeIndex(): void
     {
@@ -23,9 +33,7 @@ class TaskControllerTest extends TestCase
 
     public function testIndex(): void
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('tasks.index'));
+        $response = $this->actingAs($this->user)->get(route('tasks.index'));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewIs('tasks.index');
@@ -34,11 +42,10 @@ class TaskControllerTest extends TestCase
 
     public function testCreate(): void
     {
-        $user = User::factory()->create();
         $title = $this->faker->unique()->word();
         $description = $this->faker->unique()->text();
 
-        $response = $this->actingAs($user)->post(route('tasks.store', [
+        $response = $this->actingAs($this->user)->post(route('tasks.store', [
             'title' => $title,
             'description' => $description
         ]));
@@ -52,10 +59,9 @@ class TaskControllerTest extends TestCase
 
     public function testShow(): void
     {
-        $user = User::factory()->create();
         $task = Task::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('tasks.show', $task->id));
+        $response = $this->actingAs($this->user)->get(route('tasks.show', $task->id));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewIs('tasks.show');
@@ -65,14 +71,13 @@ class TaskControllerTest extends TestCase
     public function testUpdate(): void
     {
         $task = Task::factory()->create();
-        $user = User::factory()->create();
 
         $newTaskData = [
             'title' => 'Updated Task Title',
             'description' => 'Updated Task Description',
         ];
 
-        $this->actingAs($user)->put(route('tasks.update', $task), $newTaskData);
+        $this->actingAs($this->user)->put(route('tasks.update', $task), $newTaskData);
 
         $this->assertDatabaseHas('tasks', $newTaskData);
         $this->assertDatabaseMissing('tasks', $task->toArray());
